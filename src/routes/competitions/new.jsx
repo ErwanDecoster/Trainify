@@ -1,12 +1,17 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useRef, useState } from "react";
+import { createCompetition } from './../../database.jsx';
+import { constructFilePath, uploadDataset } from './../../util.jsx';
+import { useLoginLogout } from './../../utils/useLoginLogout.ts';
 
 const NewCompetitions = () => {
   const form1Ref = useRef();
   const [formStep, setFormStep] = useState(1);
   const navigate = useNavigate();
+  const { address } = useLoginLogout();
+  let competitionId;
 
-  const handleFormStep1 = (event) => {
+  const handleFormStep1 = async (event) => {
     event.preventDefault();
     const formData = new FormData(form1Ref.current);
     const title = formData.get('title');
@@ -14,13 +19,8 @@ const NewCompetitions = () => {
     const duration = formData.get('duration');
     const overviewDescription = formData.get('overviewDescription');
     const datasetDescription = formData.get('datasetDescription');
-  
-    console.log('Title:', title);
-    console.log('Short Description:', shortDesc);
-    console.log('Duration:', duration);
-    console.log('Overview Description:', overviewDescription);
-    console.log('Dataset Description:', datasetDescription);
-  
+    const dappAddr = '';
+    competitionId = await createCompetition(address, title, shortDesc, overviewDescription, datasetDescription, dappAddr, duration)
     setFormStep(2);
   };
   
@@ -29,7 +29,12 @@ const NewCompetitions = () => {
     const formData = new FormData(form1Ref.current);
     const testDataset = formData.get('testDataset');
     const trainDataset = formData.get('trainDataset');
-    const evaluationDapp = formData.get('evaluationDapp');
+    const evaluationDapp = formData.get('evaluationDapp'); // en train
+    console.log(testDataset);
+    const testDatasetFilepath = constructFilePath(competitionId, 'test', testDataset.name)
+    const trainDatasetFilepath = constructFilePath(competitionId, 'train', trainDataset.name)
+    uploadDataset(testDatasetFilepath, testDataset)
+    uploadDataset(trainDatasetFilepath, trainDataset)
   
     console.log('Test Dataset:', testDataset);
     console.log('Train Dataset:', trainDataset);
@@ -80,7 +85,7 @@ const NewCompetitions = () => {
               </div>
               <div className='grid gap-1 text-lg'>
                 <label htmlFor="duration">Duration :</label>
-                <input className='rounded-lg p-1' type="text" id='duration' name='duration' />
+                <input className='rounded-lg p-1' type="number" id='duration' name='duration' />
               </div>
             </div>
             <div className='bg-pink col-span-2 rounded-xl p-8 grid gap-4'>

@@ -12,6 +12,13 @@ export async function getCompetitions() {
 }
 
 
+export async function createUser(userAddr) {
+	const { data } = await supabase.from("USER").insert({
+		ADDR: userAddr
+	});
+}
+
+
 /**
  * Insert a competition with empty datasets (before the files are uploaded).
  * Returns the competition id.
@@ -30,18 +37,12 @@ export async function createCompetition(userAddr, title, shortDesc, overview, ds
 	}).select();
 
 	console.log(data);
-	return data.data[0].id;
+	return data[0].id;
 }
 
 export async function updateTestset(competitionId, filePath) {
 	const { data } = await supabase.from("COMPETITION")
-		.update({ test_set_url: filePath }),
-		.eq('id', competitionId);
-}
-
-export async function updateTestset(competitionId, filePath) {
-	const { data } = await supabase.from("COMPETITION")
-		.update({ train_set_url: filePath }),
+		.update({ test_set_url: filePath })
 		.eq('id', competitionId);
 }
 
@@ -78,25 +79,25 @@ export async function getEvaluations(competitionId) { // filter
 	console.log(`Query: ${query}`);
 
 	util.graphqlQuery(query).then(data => {
-	  if (data) {
-	    data.deals.forEach(d => {
-	    	console.log(`ID: ${d.id}`);
-	    	console.log(`TASKS:`, d.tasks);
+		if (data) {
+			data.deals.forEach(d => {
+				console.log(`ID: ${d.id}`);
+				console.log(`TASKS:`, d.tasks);
 
-	    	evaluations[d.id]['status'] = d.tasks[0].status;
+				evaluations[d.id]['status'] = d.tasks[0].status;
 
-	    	util.getIpfsResult(d.tasks[0].results)
-	    	.then(a => {
-	    		evaluations[d.id]['accuracy'] = a
-	    		console.log(`Accuracy: ${a}`);
-	    	})
-	    	.catch(e => {
-	    		console.error(`Could not download/unzip result.zip for deal [${d.id}]`);
-	    	});
-	    });
-	  } else {
-	    console.log('TheGraph: no data found');
-	  }
+				util.getIpfsResult(d.tasks[0].results)
+					.then(a => {
+						evaluations[d.id]['accuracy'] = a
+						console.log(`Accuracy: ${a}`);
+					})
+					.catch(e => {
+						console.error(`Could not download/unzip result.zip for deal [${d.id}]`);
+					});
+			});
+		} else {
+			console.log('TheGraph: no data found');
+		}
 	});
 
 	return evaluations;
@@ -124,7 +125,7 @@ export async function createEvaluation(competitionId, modelAddr, orderHash) {
  */
 export async function updateEvaluation(evaluationId, dealId) {
 	const { data } = await supabase.from("EVALUATION")
-		.update({deal_id: dealId})
+		.update({ deal_id: dealId })
 		.eq('id', evaluationId);
 }
 

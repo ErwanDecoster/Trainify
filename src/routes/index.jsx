@@ -2,14 +2,16 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useLoginLogout } from './../utils/useLoginLogout.ts';
 import { useEffect } from 'react';
 import { useRouter } from '@tanstack/react-router';
+import { createUser } from '../database.jsx';
 
 const HomePage = () => {
-  const { login, logout, isAuthenticated } = useLoginLogout();
+  const { login, logout, isAuthenticated, address } = useLoginLogout();
   const router = useRouter();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
+      createUser(address)
       console.log('isAuthenticated');
       navigate({ to: '/competitions' });
     }
@@ -30,34 +32,34 @@ const HomePage = () => {
         </div>
         <div className='bg-pink relative z-0 rounded-xl p-8 flex flex-col items-center justify-center gap-4 _cover'>
           <button onClick={login} className='bg-white px-4 py-1 text-center rounded-full'>Connect <b>my</b> wallet</button>
-          <button className='bg-white px-4 py-1 text-center rounded-full'>See competitions</button>
+          <a href='#here' className='bg-white px-4 py-1 text-center rounded-full'>See competitions</a>
         </div>
       </div>
-      <div className='bg-white text-black rounded-xl p-8 mx-auto max-w-screen-xl space-y-8'>
+      <div id='here' className='bg-white text-black rounded-xl p-8 mx-auto max-w-screen-xl space-y-8'>
         <h2>Competition</h2>
         <div className='grid grid-cols-2 gap-8'>
-          <div className='group grid p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
+          <div className='group grid gap-1 p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
             <span className='absolute -z-10 -translate-y-1/2 -translate-x-1/2 left-0 size-52 top-0 group-even:bg-orange bg-pink rounded-full' />
             <span className='absolute -z-10 translate-y-1/2 translate-x-1/2 right-0 size-52 bottom-0 group-even:bg-orange/50 bg-pink/50 rounded-full' />
             <h3>Competition title</h3>
             <p>Lorem ipsum dolor sit amet consectetur. Porttitor adipiscing nulla ut morbi quam. Tortor arcu vehicula ipsum at consequat odio duis. Sit in magna sed faucibus cursus sit sit in. Mattis nunc sollicitudin in a.</p>
             <p className='text-right'>3 days left</p>
           </div>
-          <div className='group grid p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
+          <div className='group grid gap-1 p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
             <span className='absolute -z-10 -translate-y-1/2 -translate-x-1/2 left-0 size-52 top-0 group-even:bg-orange bg-pink rounded-full' />
             <span className='absolute -z-10 translate-y-1/2 translate-x-1/2 right-0 size-52 bottom-0 group-even:bg-orange/50 bg-pink/50 rounded-full' />
             <h3>Competition title</h3>
             <p>Lorem ipsum dolor sit amet consectetur. Porttitor adipiscing nulla ut morbi quam. Tortor arcu vehicula ipsum at consequat odio duis. Sit in magna sed faucibus cursus sit sit in. Mattis nunc sollicitudin in a.</p>
             <p className='text-right'>3 days left</p>
           </div>
-          <div className='group grid p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
+          <div className='group grid gap-1 p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
             <span className='absolute -z-10 -translate-y-1/2 -translate-x-1/2 left-0 size-52 top-0 group-even:bg-orange bg-pink rounded-full' />
             <span className='absolute -z-10 translate-y-1/2 translate-x-1/2 right-0 size-52 bottom-0 group-even:bg-orange/50 bg-pink/50 rounded-full' />
             <h3>Competition title</h3>
             <p>Lorem ipsum dolor sit amet consectetur. Porttitor adipiscing nulla ut morbi quam. Tortor arcu vehicula ipsum at consequat odio duis. Sit in magna sed faucibus cursus sit sit in. Mattis nunc sollicitudin in a.</p>
             <p className='text-right'>3 days left</p>
           </div>
-          <div className='group grid p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
+          <div className='group grid gap-1 p-8 z-0 relative overflow-hidden rounded-lg shadow-lg'>
             <span className='absolute -z-10 -translate-y-1/2 -translate-x-1/2 left-0 size-52 top-0 group-even:bg-orange bg-pink rounded-full' />
             <span className='absolute -z-10 translate-y-1/2 translate-x-1/2 right-0 size-52 bottom-0 group-even:bg-orange/50 bg-pink/50 rounded-full' />
             <h3>Competition title</h3>

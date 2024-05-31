@@ -25,5 +25,6 @@ export function useLoginLogout() {
     login,
     logout,
     isAuthenticated,
+    address,
   };
 }

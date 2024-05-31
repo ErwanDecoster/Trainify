@@ -1,10 +1,12 @@
 
 import axios from 'axios';
 import JSZip from 'jszip';
-
 // Define the URL of the GraphQL endpoint
 const graph_url = 'https://thegraph.bellecour.iex.ec/subgraphs/name/bellecour/poco-v5';
+import { createClient } from "@supabase/supabase-js";
 
+
+const supabase = createClient("https://hgfmpwhgcuqpxzzksnak.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnZm1wd2hnY3VxcHh6emtzbmFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTcwNzIwNDUsImV4cCI6MjAzMjY0ODA0NX0.q-AGpGv5LvONEQagnhTYCR8oKMwCsmEHvW86x924U84");
 
 
 // Function to fetch data from the GraphQL endpoint
@@ -35,9 +37,9 @@ const ipfs_gateway_url = 'https://ipfs-gateway.v8-bellecour.iex.ec'
 
 function hex_to_ascii(hex)
  {
-	var hex  = hex.toString();
-	var str = '';
-	for (var n = 0; n < hex.length; n += 2)
+	hex = hex.toString();
+	let str = '';
+	for (let n = 0; n < hex.length; n += 2)
 		str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
 
 	return str;
@@ -85,14 +87,10 @@ export async function getIpfsResult(result) {
 	return downloadAndExtract(url, 'result.txt');
 }
 
-
-
-
-
 /*
  * File upload to Supabase
  */
-const tus = require('tus-js-client');
+import * as tus from 'tus-js-client';
 const projectId = 'hgfmpwhgcuqpxzzksnak';
 
 /**
@@ -100,22 +98,23 @@ const projectId = 'hgfmpwhgcuqpxzzksnak';
  * 
  * bucketName must be either 'test_sets' or 'train_sets'.
  */
-async function uploadFile(bucketName, fileName, file) {
-    const { data: { session } } = await supabase.auth.getSession();
-
+async function uploadFile(bucketName, filename, file) {
+  console.log(supabase.auth);
+    // const { data: { session } } = await supabase.auth.getSession();
+    // console.log(session);
     return new Promise((resolve, reject) => {
-        var upload = new tus.Upload(file, {
+        let upload = new tus.Upload(file, {
             endpoint: `https://${projectId}.supabase.co/storage/v1/upload/resumable`,
             retryDelays: [0, 3000, 5000, 10000, 20000],
             headers: {
-                authorization: `Bearer ${session.access_token}`,
+                authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnZm1wd2hnY3VxcHh6emtzbmFrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxNzA3MjA0NSwiZXhwIjoyMDMyNjQ4MDQ1fQ.vNBlXPTu2hf9VV7R4AnbCDhnydPb9UYyR2j0Bl8Lafc                `,
                 'x-upsert': 'true', // optionally set upsert to true to overwrite existing files
             },
             uploadDataDuringCreation: true,
             removeFingerprintOnSuccess: true, // Important if you want to allow re-uploading the same file https://github.com/tus/tus-js-client/blob/main/docs/api.md#removefingerprintonsuccess
             metadata: {
                 bucketName: bucketName,
-                objectName: fileName,
+                objectName: filename,
                 //contentType: 'image/png',
                 cacheControl: 3600,
             },
@@ -125,7 +124,7 @@ async function uploadFile(bucketName, fileName, file) {
                 reject(error);
             },
             onProgress: function (bytesUploaded, bytesTotal) {
-                var percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+                let percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
                 console.log(bytesUploaded, bytesTotal, percentage + '%');
             },
             onSuccess: function () {
@@ -149,12 +148,12 @@ async function uploadFile(bucketName, fileName, file) {
 }
 
 
-export async function uploadDataset(filePath) {
-	return uploadFile('datasets', filePath);
+export async function uploadDataset(filePath, file) {
+	return uploadFile('datasets', filePath, file);
 }
 
 export async function downloadDataset(filePath) {
-	const { data, error } = await supabase.storage.from('datasets').download('filePath');
+	const { data, error } = await supabase.storage.from('datasets').download(filePath);
 }
 
 

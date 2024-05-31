@@ -1,9 +1,26 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { useState } from "react";
+import { createFileRoute, Link, useMatch } from '@tanstack/react-router';
+import { useState, useEffect } from "react";
+import avatar from "./../../assets/avatars/1.png";
+import { getCompetitions } from './../../database.jsx';
 
 const CompetitionId = () => {
   const [activeTab, setActiveTab] = useState(1);
+  const [competitions, setCompetitions] = useState([]);
   
+  const [competitionId, setCompetitionId] = useState(null);
+  const { params } = useMatch('/collections/$id');
+  useEffect(() => {
+    const fetchCompetitions = async () => {
+      const competitions = await getCompetitions();
+      setCompetitions(competitions);
+    };
+    fetchCompetitions();
+  }, []);
+
+  useEffect(() => {
+    setCompetitionId(params.id)
+    console.log(competitions);
+  }, [params.id]);
 
   return (
     <div className='bg-white min-h-screen flex flex-col p-8 pb-32 gap-8'>
@@ -21,9 +38,9 @@ const CompetitionId = () => {
       </div>
       <div className='bg-white text-black rounded-xl px-8 mx-auto max-w-screen-xl w-full space-y-8'>
         <div className='flex gap-1 items-center'>
-          <h2>Title</h2>
+          {/* <h2>{competitions[competitionId].title}</h2> */}
           <span>by</span>
-          <img className='size-8' src="" alt="" />
+          <img className='size-8' src={avatar} alt="" />
           <span>0xf525....A6F74d</span>
         </div>
         <div>
@@ -71,18 +88,6 @@ const CompetitionId = () => {
                 <p>Uploaded date</p>
                 <p>Accuracy</p>
                 <p>Price</p>
-              </div>
-              <div className='bg-white rounded-lg px-4 py-2 grid grid-cols-4'>
-                <div><img src="" alt="" /><span>0xf525....A6F74d</span></div>
-                <p>Uploaded date</p>
-                <p>0%</p>
-                <p>3 RLC</p>
-              </div>
-              <div className='bg-white rounded-lg px-4 py-2 grid grid-cols-4'>
-                <div><img src="" alt="" /><span>0xf525....A6F74d</span></div>
-                <p>Uploaded date</p>
-                <p>0%</p>
-                <p>3 RLC</p>
               </div>
               <div className='bg-white rounded-lg px-4 py-2 grid grid-cols-4'>
                 <div><img src="" alt="" /><span>0xf525....A6F74d</span></div>
