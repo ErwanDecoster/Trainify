@@ -38,14 +38,14 @@ const CompetitionId = () => {
       </div>
       <div className='bg-white text-black rounded-xl px-8 mx-auto max-w-screen-xl w-full space-y-8'>
         <div className='flex gap-1 items-center'>
-          {/* <h2>{competitions[competitionId].title}</h2> */}
+          <h2>Red Wine Quality</h2>
           <span>by</span>
           <img className='size-8' src={avatar} alt="" />
           <span>0xf525....A6F74d</span>
         </div>
-        <div>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem eum quasi enim iure. Quis, commodi adipisci eaque qui esse vel, incidunt in hic praesentium, iusto vero culpa perspiciatis ad! Nostrum?</p>
-          <p>2 days left</p>
+        <div className='space-y-2'>
+          <p>For this competition, use your machine-learning skills to create a model that predicts if a wine is good or bad. You can set a threshold for wine quality, classifying wines with a score of 6 or higher as 'good' (1) and the rest as 'not good' (0).</p>
+          <p className='font-semibold'>7 days left</p>
         </div>
         <div className='grid'>
           {activeTab === 1 ? ( 
@@ -71,11 +71,13 @@ const CompetitionId = () => {
             <div className='space-y-8 p-8 bg-pink rounded-b-xl rounded-tr-xl'>
               <div className='space-y-1'>
                 <h4>Overview description</h4>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore facere harum eaque corrupti in praesentium! Unde adipisci velit perferendis eligendi vitae nulla blanditiis dignissimos cum nihil. Architecto ut amet laborum.</p>
+                <p>Birds are excellent indicators of biodiversity change since they are highly mobile and have diverse habitat requirements. Changes in species assemblage and the number of birds can thus indicate the success or failure of a restoration project. However, frequently conducting traditional observer-based bird biodiversity surveys over large areas is expensive and logistically challenging. In comparison, passive acoustic monitoring (PAM) combined with new analytical tools based on machine learning allows conservationists to sample much greater spatial scales with higher temporal resolution and explore the relationship between restoration interventions and biodiversity in depth.</p>
               </div>
               <div className='space-y-1'>
                 <h4>Dataset description</h4>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore facere harum eaque corrupti in praesentium! Unde adipisci velit perferendis eligendi vitae nulla blanditiis dignissimos cum nihil. Architecto ut amet laborum.</p>
+                <p>The two datasets are related to red and white variants of the Portuguese "Vinho Verde" wine. For more details, consult the reference [Cortez et al., 2009]. Due to privacy and logistic issues, only physicochemical (inputs) and sensory (the output) variables are available (e.g. there is no data about grape types, wine brand, wine selling price, etc.).
+
+These datasets can be viewed as classification or regression tasks. The classes are ordered and not balanced (e.g. there are much more normal wines than excellent or poor ones).</p>
               </div>
               <button className='rounded-lg text-center duration-300 bg-black text-white hover:bg-black/80 py-2 px-4 h-auto' onClick={() => setActiveTab(1)}>
                 Download train dataset

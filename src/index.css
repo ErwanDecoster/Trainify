@@ -29,9 +29,10 @@ html {
     @apply text-2xl font-medium
   }
 
-  h3 {
+  h3, h4 {
     @apply text-xl font-medium
   }
+
 
   body {
     font-family: 'Raleway', sans-serif;
